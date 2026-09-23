@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>kartikvn — HTML &amp; CSS Foundations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#14171c; --surface:#1b2027; --surface2:#20262f; --border:#2c333d;
+  --text:#e7e6e2; --muted:#93a0af; --html:#ff8a65; --css:#63b3ff; --ok:#7ee787;
+  --warn:#ffcb6b; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:1rem}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Source Sans 3',system-ui,sans-serif;line-height:1.6;display:flex;min-height:100%}
+h1,h2,h3,.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+::selection{background:var(--css);color:#0b0d10}
+a{color:inherit}
+
+.sidebar{width:270px;flex:none;background:var(--surface);border-right:1px solid var(--border);height:100vh;position:sticky;top:0;overflow-y:auto;padding:1.4rem 1rem 2rem}
+.brand{font-weight:700;font-size:1.05rem;padding:0 .6rem .8rem;border-bottom:1px solid var(--border);margin-bottom:.8rem}
+.brand span{color:var(--html)}.brand span+span{color:var(--css)}
+.grp-label{font-size:.72rem;color:var(--muted);letter-spacing:.04em;padding:.9rem .6rem .3rem}
+.sidebar a{display:block;padding:.4rem .6rem;border-radius:6px;text-decoration:none;color:var(--muted);font-size:.87rem;border-left:2px solid transparent}
+.sidebar a:hover{color:var(--text);background:var(--surface2)}
+.sidebar a.active{color:var(--text);border-left-color:var(--css);background:var(--surface2)}
+#navtoggle{display:none}
+
+main{flex:1;min-width:0;padding:3rem clamp(1.2rem,4vw,4rem);max-width:900px}
+.kicker{font-size:.78rem;letter-spacing:.02em;color:var(--muted);margin:0 0 .3rem}
+h1.page{font-size:clamp(1.8rem,4vw,2.6rem);margin:0 0 .4rem}
+.lede{color:var(--muted);max-width:60ch;margin-bottom:2.4rem}
+section{padding:2.2rem 0;border-top:1px solid var(--border)}
+section:first-of-type{border-top:none}
+section h2{font-size:1.3rem;margin:0 0 .15rem;display:flex;align-items:center;gap:.5rem}
+.tag{font-size:.65rem;padding:.15rem .45rem;border-radius:4px;font-weight:700;letter-spacing:.02em}
+.tag.html{background:rgba(255,138,101,.15);color:var(--html)}
+.tag.css{background:rgba(99,179,255,.15);color:var(--css)}
+.tag.concept{background:rgba(126,231,135,.15);color:var(--ok)}
+section p{margin:.6rem 0;max-width:68ch}
+section ul{margin:.6rem 0;padding-left:1.2rem}
+section li{margin:.25rem 0}
+code.inline{background:var(--surface2);padding:.1rem .35rem;border-radius:4px;font-size:.85em;font-family:'JetBrains Mono',monospace}
+pre{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--css);border-radius:8px;padding:.9rem 1.1rem;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.55;margin:.8rem 0}
+pre.html-ex{border-left-color:var(--html)}
+.demo{background:#fff;color:#111;border-radius:8px;padding:1rem;margin:.8rem 0;font-family:system-ui,sans-serif}
+.demo-label{font-size:.7rem;color:var(--muted);margin-bottom:.4rem;font-family:'JetBrains Mono',monospace}
+.demowrap{overflow-x:auto}
+footer{color:var(--muted);font-size:.8rem;padding:2rem 0 4rem;border-top:1px solid var(--border)}
+
+/* box model demo */
+.bm-outer{background:#fdf1e8;padding:20px;display:inline-block}
+.bm-border{border:6px solid #e07a4c}
+.bm-pad{background:#eaf3ff;padding:16px}
+.bm-content{background:#5c7cfa;color:#fff;padding:10px 14px;font-size:.8rem;text-align:center}
+
+/* box sizing demo */
+.bs-row{display:flex;gap:1rem;flex-wrap:wrap}
+.bs-box{width:160px;padding:16px;border:8px solid #e07a4c;background:#5c7cfa;color:#fff;font-size:.78rem;text-align:center}
+.bs-content{box-sizing:content-box}
+.bs-border{box-sizing:border-box}
+
+/* overflow demo */
+.ov-box{width:180px;height:70px;border:1px solid #ccc;padding:8px;font-size:.78rem}
+.ov-hidden{overflow:hidden}
+.ov-scroll{overflow:auto}
+.ov-visible{overflow:visible}
+
+/* specificity demo */
+#spec-target{color:#999}
+.spec-cls#spec-target{color:#e07a4c}
+p.spec-cls{color:#5c7cfa!important}
+
+@media (prefers-color-scheme: light){:root{--bg:#14171c}}
+@media (max-width:820px){
+  body{flex-direction:column}
+  .sidebar{position:relative;height:auto;width:100%;top:0;border-right:none;border-bottom:1px solid var(--border)}
+  main{padding:2rem 1.1rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="sidebar" id="sidebar">
+  <div class="brand">kartikvn <span style="color:var(--muted);font-weight:400">/ html+css</span></div>
+
+  <div class="grp-label">Getting Started</div>
+  <a href="#getting-started">Getting Started with Web Dev</a>
+  <a href="#genai-intro">Intro to GenAI in Web Dev</a>
+  <a href="#platform-walkthrough">Coding Platform Walkthrough</a>
+
+  <div class="grp-label">HTML</div>
+  <a href="#intro-html">Introduction to HTML</a>
+  <a href="#html5">Introduction to HTML5</a>
+  <a href="#semantic">HTML Semantic Elements</a>
+  <a href="#void-lists">Void Elements &amp; Lists</a>
+  <a href="#hyperlinks">HTML Hyperlinks</a>
+  <a href="#behind-scenes">Website: Behind the Scenes</a>
+
+  <div class="grp-label">CSS Fundamentals</div>
+  <a href="#intro-css">Introduction to CSS (Parts 1–3)</a>
+  <a href="#selectors">CSS Selectors &amp; Inheritance</a>
+  <a href="#more-selectors">More CSS Selectors</a>
+  <a href="#specificity">Specificity &amp; Cascade</a>
+  <a href="#more-css">More CSS Concepts</a>
+
+  <div class="grp-label">Box Model &amp; Layout</div>
+  <a href="#box-model">CSS Box Model (Parts 1–2)</a>
+  <a href="#box-sizing">Box Sizing</a>
+  <a href="#sizing-overflow">Sizing &amp; Overflow</a>
+
+  <div class="grp-label">GenAI Workflow</div>
+  <a href="#genai-learning">GenAI for Accelerated Learning</a>
+  <a href="#genai-debug">GenAI for Debugging &amp; Building</a>
+</nav>
+
+<main>
+<p class="kicker">kartikvn.dev · FULL COURSE · ALL TOPICS</p>
+<h1 class="page">HTML &amp; CSS Foundations</h1>
+<p class="lede">A complete walkthrough of how web pages are built and styled — from your first tag to the box model and CSS cascade, with real, live-rendered examples throughout.</p>
+
+<section id="getting-started">
+<h2><span class="tag concept">Concept</span> Getting Started with Web Development</h2>
+<p>Every website is built from three layers working together: <strong>HTML</strong> gives a page its structure and content (headings, paragraphs, images), <strong>CSS</strong> controls how that structure looks (colors, spacing, layout), and <strong>JavaScript</strong> adds behavior (clicks, animations, logic). This course focuses on the first two — HTML and CSS — which are enough to build a fully-styled, static website.</p>
+<p>To write HTML and CSS you need only a text editor and a browser. Files are plain text saved with <code class="inline">.html</code> or <code class="inline">.css</code> extensions; the browser reads them top to bottom and renders the result.</p>
+</section>
+
+<section id="genai-intro">
+<h2><span class="tag concept">Concept</span> Introduction to GenAI in Web Development</h2>
+<p>Generative AI tools (like Claude) can scaffold HTML/CSS structure, explain error messages, suggest layout approaches, and generate placeholder content — turning a blank page into a working draft in seconds. The skill to build alongside this is reading and understanding the code AI produces, not just accepting it — so you can adapt it and know when it's wrong.</p>
+</section>
+
+<section id="platform-walkthrough">
+<h2><span class="tag concept">Concept</span> Coding Platform Walkthrough</h2>
+<p>Most beginner platforms give you three panes: an HTML editor, a CSS editor, and a live preview that updates as you type. Some (like CodePen or your browser's dev tools) also add a console for JavaScript errors. The core workflow is always: <em>write → save → refresh → observe</em>.</p>
+</section>
+
+<section id="intro-html">
+<h2><span class="tag html">HTML</span> Introduction to HTML</h2>
+<p>HTML (HyperText Markup Language) describes content using <strong>elements</strong>, written as tags. Most elements have an opening tag, content, and a closing tag: <code class="inline">&lt;p&gt;text&lt;/p&gt;</code>. Every HTML document follows the same skeleton:</p>
+<pre class="html-ex"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello, world&lt;/h1&gt;
+    &lt;p&gt;This is my first paragraph.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p><code class="inline">&lt;!DOCTYPE html&gt;</code> tells the browser to use modern HTML rules. <code class="inline">&lt;head&gt;</code> holds metadata (not visible content); <code class="inline">&lt;body&gt;</code> holds everything the visitor sees. Tags can carry <strong>attributes</strong> — extra info inside the opening tag, like <code class="inline">lang="en"</code> or <code class="inline">src="cat.jpg"</code>.</p>
+</section>
+
+<section id="html5">
+<h2><span class="tag html">HTML</span> Introduction to HTML5</h2>
+<p>HTML5 is the current standard. It added native support for audio/video, form validation, and — most importantly for structure — <strong>semantic elements</strong>, so pages no longer rely on generic <code class="inline">&lt;div&gt;</code> soup to describe their layout.</p>
+</section>
+
+<section id="semantic">
+<h2><span class="tag html">HTML</span> HTML Semantic Elements</h2>
+<p>Semantic elements describe the <em>meaning</em> of a region, not just its box. This helps browsers, search engines, and screen readers understand your page.</p>
+<pre class="html-ex"><code>&lt;header&gt;Site logo &amp; nav&lt;/header&gt;
+&lt;nav&gt;...&lt;/nav&gt;
+&lt;main&gt;
+  &lt;article&gt;
+    &lt;h1&gt;Post title&lt;/h1&gt;
+    &lt;section&gt;Content section&lt;/section&gt;
+  &lt;/article&gt;
+  &lt;aside&gt;Related links&lt;/aside&gt;
+&lt;/main&gt;
+&lt;footer&gt;Copyright&lt;/footer&gt;</code></pre>
+<p>Compare that to using only <code class="inline">&lt;div class="header"&gt;</code> everywhere — it works visually, but tells assistive tech and machines nothing about the page's shape.</p>
+</section>
+
+<section id="void-lists">
+<h2><span class="tag html">HTML</span> Void Elements &amp; Lists</h2>
+<p><strong>Void elements</strong> have no closing tag and no content — they're self-contained: <code class="inline">&lt;img&gt;</code>, <code class="inline">&lt;br&gt;</code>, <code class="inline">&lt;hr&gt;</code>, <code class="inline">&lt;input&gt;</code>, <code class="inline">&lt;meta&gt;</code>.</p>
+<p><strong>Lists</strong> come in two kinds: unordered (<code class="inline">&lt;ul&gt;</code>, bullets) and ordered (<code class="inline">&lt;ol&gt;</code>, numbers), each containing <code class="inline">&lt;li&gt;</code> items.</p>
+<pre class="html-ex"><code>&lt;img src="cat.jpg" alt="A cat"&gt;
+&lt;ul&gt;
+  &lt;li&gt;Milk&lt;/li&gt;
+  &lt;li&gt;Eggs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+  &lt;li&gt;Preheat oven&lt;/li&gt;
+  &lt;li&gt;Mix batter&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+<div class="demo"><div class="demo-label">rendered</div>
+<img src="" alt="A cat" style="display:none">
+<ul style="margin:.3rem 0"><li>Milk</li><li>Eggs</li></ul>
+<ol style="margin:.3rem 0"><li>Preheat oven</li><li>Mix batter</li></ol>
+</div>
+</section>
+
+<section id="hyperlinks">
+<h2><span class="tag html">HTML</span> HTML Hyperlinks</h2>
+<p>Links use the <code class="inline">&lt;a&gt;</code> tag with an <code class="inline">href</code> attribute pointing to a destination — another page, a section on the same page (<code class="inline">#id</code>), an email (<code class="inline">mailto:</code>), or a file.</p>
+<pre class="html-ex"><code>&lt;a href="https://example.com"&gt;Visit site&lt;/a&gt;
+&lt;a href="#pricing"&gt;Jump to pricing&lt;/a&gt;
+&lt;a href="mailto:hi@site.com"&gt;Email us&lt;/a&gt;</code></pre>
+<div class="demo"><div class="demo-label">rendered</div><a href="#" style="color:#3457d5">Visit site</a></div>
+</section>
+
+<section id="behind-scenes">
+<h2><span class="tag concept">Concept</span> Website: Behind the Scenes</h2>
+<p>When you type a URL, your browser sends a request to a server, which sends back HTML. The browser parses that HTML into the <strong>DOM</strong> (Document Object Model), fetches linked CSS and applies styles to build the <strong>render tree</strong>, then paints pixels to the screen. Any linked JavaScript runs and can modify the DOM afterward, which triggers a re-render.</p>
+</section>
+
+<section id="intro-css">
+<h2><span class="tag css">CSS</span> Introduction to CSS — Parts 1–3</h2>
+<p><strong>Part 1 — Syntax.</strong> CSS rules pair a <em>selector</em> (what to style) with a <em>declaration block</em> (how to style it), made of property:value pairs.</p>
+<pre><code>selector {
+  property: value;
+  property: value;
+}
+
+p {
+  color: navy;
+  font-size: 18px;
+}</code></pre>
+<p><strong>Part 2 — Three ways to apply CSS.</strong> Inline (on the element, avoid this), internal (a <code class="inline">&lt;style&gt;</code> tag in <code class="inline">&lt;head&gt;</code>), and external (a separate <code class="inline">.css</code> file linked via <code class="inline">&lt;link&gt;</code> — the standard, scalable approach).</p>
+<pre class="html-ex"><code>&lt;link rel="stylesheet" href="styles.css"&gt;</code></pre>
+<p><strong>Part 3 — Common properties.</strong> <code class="inline">color</code>, <code class="inline">background</code>, <code class="inline">font-size</code>, <code class="inline">font-weight</code>, <code class="inline">text-align</code>, <code class="inline">margin</code>, <code class="inline">padding</code>, <code class="inline">border</code>, <code class="inline">display</code> cover most day-to-day styling.</p>
+</section>
+
+<section id="selectors">
+<h2><span class="tag css">CSS</span> CSS Selectors &amp; Inheritance</h2>
+<pre><code>p            /* type: all &lt;p&gt; elements     */
+.card        /* class: any el. with class="card" */
+#logo        /* id: the one el. with id="logo"    */
+p.intro      /* combined: &lt;p&gt; with class intro */
+div p        /* descendant: any &lt;p&gt; inside a &lt;div&gt; */</code></pre>
+<p><strong>Inheritance:</strong> some properties (mainly text-related — <code class="inline">color</code>, <code class="inline">font-family</code>) pass automatically from parent to child unless overridden. Layout properties like <code class="inline">border</code> or <code class="inline">margin</code> do <em>not</em> inherit.</p>
+</section>
+
+<section id="more-selectors">
+<h2><span class="tag css">CSS</span> More CSS Selectors</h2>
+<pre><code>ul &gt; li          /* direct child       */
+h2 + p           /* immediately after  */
+a:hover          /* pseudo-class: on hover */
+li:first-child   /* pseudo-class: position */
+p::first-line    /* pseudo-element: part of an element */
+[type="text"]    /* attribute selector */</code></pre>
+</section>
+
+<section id="specificity">
+<h2><span class="tag css">CSS</span> CSS Specificity &amp; Cascade</h2>
+<p>When multiple rules target the same element, the browser picks a winner using <strong>specificity</strong> — roughly: inline styles &gt; IDs &gt; classes/attributes &gt; type selectors. If specificity ties, the rule that appears <em>last</em> in the CSS wins (the "cascade"). <code class="inline">!important</code> overrides normal specificity entirely and should be used sparingly.</p>
+<pre><code>#spec-target   { color: gray;   }  /* id: wins over class */
+.spec-cls#spec-target { color: orange; } /* id+class: more specific still */
+p.spec-cls     { color: blue !important; } /* !important overrides all */</code></pre>
+<div class="demo"><div class="demo-label">rendered — final color is decided by specificity + !important</div>
+<p id="spec-target" class="spec-cls" style="margin:0;font-weight:600">This text's color is decided by the cascade.</p>
+</div>
+</section>
+
+<section id="more-css">
+<h2><span class="tag css">CSS</span> More CSS Concepts</h2>
+<p>Beyond selectors and boxes, everyday CSS relies on: <code class="inline">display</code> (block / inline / flex / grid), <code class="inline">position</code> (static / relative / absolute / fixed), units (<code class="inline">px</code>, <code class="inline">%</code>, <code class="inline">rem</code>, <code class="inline">vh</code>/<code class="inline">vw</code>), and <code class="inline">flexbox</code> for one-dimensional layouts:</p>
+<pre><code>.row { display: flex; gap: 12px; justify-content: space-between; }</code></pre>
+</section>
+
+<section id="box-model">
+<h2><span class="tag css">CSS</span> CSS Box Model — Parts 1–2</h2>
+<p>Every HTML element is a rectangular box made of four layers, from the inside out: <strong>content</strong> → <strong>padding</strong> → <strong>border</strong> → <strong>margin</strong>. Padding is space inside the border; margin is space outside it, separating the box from its neighbors.</p>
+<pre><code>.box {
+  width: 200px;
+  padding: 16px;
+  border: 6px solid orange;
+  margin: 20px;
+}</code></pre>
+<div class="demo"><div class="demo-label">rendered — orange = border, blue = content, the tan area is margin space</div>
+<div class="demowrap"><div class="bm-outer"><div class="bm-border"><div class="bm-pad"><div class="bm-content">content</div></div></div></div></div>
+</div>
+<p>Part 2: the <em>total rendered size</em> of a default box is width + padding + border (margin sits outside and only affects spacing to neighbors) — which is exactly the problem <code class="inline">box-sizing</code> solves next.</p>
+</section>
+
+<section id="box-sizing">
+<h2><span class="tag css">CSS</span> Box Sizing</h2>
+<p>By default (<code class="inline">box-sizing: content-box</code>), padding and border are <em>added on top of</em> the width you set — a 160px box with 16px padding and 8px border actually renders 208px wide. <code class="inline">box-sizing: border-box</code> instead makes width include padding and border, so the box stays exactly the size you declared.</p>
+<pre><code>.content-box { box-sizing: content-box; width: 160px; } /* grows beyond 160px */
+.border-box  { box-sizing: border-box;  width: 160px; } /* stays 160px total */
+
+* { box-sizing: border-box; } /* common reset, applied to everything */</code></pre>
+<div class="demo"><div class="demo-label">rendered — both boxes are declared width:160px, same padding/border</div>
+<div class="bs-row">
+  <div class="bs-box bs-content">content-box<br>renders wider</div>
+  <div class="bs-box bs-border">border-box<br>stays 160px</div>
+</div>
+</div>
+</section>
+
+<section id="sizing-overflow">
+<h2><span class="tag css">CSS</span> Sizing Elements &amp; Handling Overflow</h2>
+<p>When content is bigger than its box, <code class="inline">overflow</code> decides what happens: <code class="inline">visible</code> (default, spills out), <code class="inline">hidden</code> (clipped), <code class="inline">scroll</code>/<code class="inline">auto</code> (scrollbars appear as needed).</p>
+<pre><code>.box { width: 180px; height: 70px; overflow: hidden; }</code></pre>
+<div class="demo"><div class="demo-label">rendered — same text, three overflow values</div>
+<div class="bs-row">
+  <div class="ov-box ov-visible">visible: text spills past the box edge freely</div>
+  <div class="ov-box ov-hidden">hidden: text spills past the box edge freely</div>
+  <div class="ov-box ov-scroll">auto: text spills past the box edge freely</div>
+</div>
+</div>
+</section>
+
+<section id="genai-learning">
+<h2><span class="tag concept">Concept</span> Leveraging GenAI for Accelerated Learning</h2>
+<p>Use AI to shorten the feedback loop: ask it to explain <em>why</em> a snippet behaves a certain way, generate small variations of a concept to compare side by side, or quiz you on selectors and specificity until it's automatic. The highest-leverage habit is asking "why" after every answer, not just copying the fix.</p>
+</section>
+
+<section id="genai-debug">
+<h2><span class="tag concept">Concept</span> Leveraging GenAI for Debugging &amp; Building</h2>
+<p>When a layout breaks, paste the relevant HTML + CSS and the actual vs. expected result — AI is much more accurate with that context than with "my CSS is broken." For building, use AI to scaffold a first draft fast, then take over to refine details and make sure you understand every rule it wrote.</p>
+</section>
+
+<footer>kartikvn.dev — course reference built for self-paced review. Scroll or use the sidebar to jump between topics.</footer>
+</main>
+
+<script>
+const links=[...document.querySelectorAll('.sidebar a')];
+const sections=links.map(a=>document.querySelector(a.getAttribute('href')));
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id='#'+e.target.id;
+      links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===id));
+    }
+  });
+},{rootMargin:'-15% 0px -75% 0px'});
+sections.forEach(s=>s&&io.observe(s));
+</script>
+</body>
+</html>
